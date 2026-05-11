@@ -1,0 +1,24 @@
+# Java 编译文件
+*.class
+*.jar
+!mysql-connector-java-8.0.33.jar
+
+# IDE 配置文件
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# 编译输出目录
+/moneyTransfer/
+
+# 日志文件
+*.log
+
+# 临时文件
+*.tmp
+*.swp
+*~
+
+# 数据库配置（敏感信息）
+# config/db.properties  # 取消注释以忽略配置文件

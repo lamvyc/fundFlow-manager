@@ -3,18 +3,172 @@
 ## 📋 当前进度
 
 - ✅ Step 0: 项目结构创建完成
-- ✅ 工具类创建完成 (DBUtil, PrintUtil)
-- 🔄 **你现在在这里 → Step 1: 数据库搭建**
-- ⏳ Step 2: 实体类
-- ⏳ Step 3: 用户管理
-- ⏳ Step 4: 账户管理
-- ⏳ Step 5: 发钱功能
+- ✅ Step 1: 数据库搭建完成
+- ✅ Step 2: 实体类创建完成
+- ✅ Step 3: 用户管理（CRUD）完成
+- ✅ Step 4: 账户管理（事务处理）完成
+- 🔄 **你现在在这里 → Step 5: 发钱功能（复杂事务）**
 - ⏳ Step 6: 统计功能
 - ⏳ Step 7: 完整系统
 
+**当前完成度：66% ✅**
+
 ---
 
-## 🎯 Step 1: 数据库搭建（你的第一个任务）
+## 🎉 已完成的学习内容
+
+### ✅ Step 1: 数据库搭建
+**学到了什么：**
+- 创建数据库和表
+- 主键、外键、索引的使用
+- 数据库设计三范式
+- 测试数据的插入
+
+**关键文件：**
+- `sql/init.sql` - 数据库初始化脚本
+
+---
+
+### ✅ Step 2: 实体类
+**学到了什么：**
+- 实体类的封装（private 字段）
+- getter/setter 方法的作用
+- 构造函数的使用
+- toString() 方法的重写
+- 为什么金额用 BigDecimal 而不是 double
+
+**关键文件：**
+- `src/moneyTransfer/entity/User.java`
+- `src/moneyTransfer/entity/Account.java`
+- `src/moneyTransfer/entity/PaymentRecord.java`
+- `src/moneyTransfer/entity/RechargeRecord.java`
+
+**核心知识点：**
+```java
+// BigDecimal 精确计算
+BigDecimal balance = new BigDecimal("100.00");
+BigDecimal amount = new BigDecimal("50.00");
+BigDecimal newBalance = balance.add(amount);  // 150.00
+
+// double 有精度误差
+double d = 0.1 + 0.2;  // 0.30000000000000004 ❌
+```
+
+---
+
+### ✅ Step 3: 用户管理（CRUD）
+**学到了什么：**
+- JDBC 连接管理
+- PreparedStatement 的使用（防 SQL 注入）
+- ResultSet 结果集处理
+- DAO 设计模式
+- 软删除 vs 硬删除
+
+**关键文件：**
+- `src/moneyTransfer/dao/UserDao.java`
+- `src/moneyTransfer/Step3_UserDaoTest.java`
+
+**核心知识点：**
+```java
+// JDBC 标准流程
+Connection conn = DBUtil.getConnection();
+PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE id = ?");
+pstmt.setInt(1, userId);
+ResultSet rs = pstmt.executeQuery();
+while (rs.next()) {
+    // 处理结果
+}
+rs.close();
+pstmt.close();
+conn.close();
+```
+
+---
+
+### ✅ Step 4: 账户管理（事务处理）⭐
+**学到了什么：**
+- 数据库事务（ACID 特性）
+- setAutoCommit(false) / commit() / rollback()
+- SELECT ... FOR UPDATE 悲观锁
+- 充值流水记录
+- 事务的原子性保证
+
+**关键文件：**
+- `src/moneyTransfer/dao/AccountDao.java`
+- `src/moneyTransfer/Step4_AccountDaoTest.java`
+- `docs/TRANSACTION_GUIDE.md` ⭐（必读）
+
+**核心知识点：**
+```java
+// 事务处理三步走
+conn.setAutoCommit(false);  // 1. 开启事务
+try {
+    // 2. 执行多个操作
+    // 更新余额
+    // 插入流水记录
+    conn.commit();  // 3. 提交事务
+} catch (Exception e) {
+    conn.rollback();  // 失败则回滚
+}
+```
+
+---
+
+## 🔄 当前学习：Step 5 - 发钱功能（复杂事务）
+
+### 即将学习的内容
+
+1. **PaymentRecordDao** - 发钱记录管理
+2. **PaymentService** - 业务逻辑层
+3. **复杂事务处理** - 多表操作的原子性
+4. **业务逻辑验证** - 余额检查、状态检查
+5. **自定义异常** - InsufficientBalanceException 等
+
+### 核心挑战
+
+发钱操作涉及两张表：
+- `accounts` 表：扣减余额
+- `payment_records` 表：创建发钱记录
+
+**必须保证原子性**：两步要么都成功，要么都失败！
+
+---
+
+## 📚 推荐阅读顺序
+
+### 新手必读文档
+
+1. **docs/LEARNING_GUIDE.md**（本文件）- 学习路线图
+2. **docs/JDBC_CHEATSHEET.md** - JDBC 常用方法速查
+3. **docs/TRANSACTION_GUIDE.md** - 事务详解（Step 4 必读）
+
+### 问题排查文档
+
+4. **docs/IDEA_SETUP.md** - IDEA 配置指南
+5. **README.md** - 常见问题解答
+
+### 进阶文档
+
+6. **docs/PROJECT_OVERVIEW.md** - 项目全貌和统计
+
+---
+
+## 🎯 Step 1-4 回顾指南
+### 如何复习已完成的内容？
+
+```bash
+# 运行快速测试脚本
+./run.sh
+
+# 选择对应的测试：
+# 3) Step2: 实体类测试
+# 4) Step3: 用户管理测试
+# 5) Step4: 账户管理测试
+```
+
+---
+
+## 📝 Step 1: 数据库搭建（已完成）
 
 ### 需要做什么？
 

@@ -145,11 +145,11 @@ curl -L -o mysql-connector-java-8.0.33.jar \
 | 文档 | 内容 | 何时查看 |
 |------|------|---------|
 | **README.md** | 项目总览、快速开始 | 克隆项目后第一个看 |
-| **LEARNING_GUIDE.md** | 详细学习指南 | 开始 Step 1 之前 |
-| **JDBC_CHEATSHEET.md** | JDBC 常用方法速查 | 写代码时随时查阅 |
-| **TRANSACTION_GUIDE.md** | 事务详解 | 学习 Step 4 时必读 |
-| **IDEA_SETUP.md** | IDEA 配置指南 | 使用 IDEA 时查看 |
-| **PROJECT_OVERVIEW.md** | 项目总览 | 了解项目全貌 |
+| **docs/LEARNING_GUIDE.md** | 详细学习指南 | 开始 Step 1 之前 |
+| **docs/JDBC_CHEATSHEET.md** | JDBC 常用方法速查 | 写代码时随时查阅 |
+| **docs/TRANSACTION_GUIDE.md** | 事务详解 | 学习 Step 4 时必读 |
+| **docs/IDEA_SETUP.md** | IDEA 配置指南 | 使用 IDEA 时查看 |
+| **docs/PROJECT_OVERVIEW.md** | 项目总览 | 了解项目全貌 |
 
 ---
 

@@ -150,3 +150,42 @@ public class Step1_DatabaseSetup {
         }
     }
 }
+
+/*
+ * JDBC 数据库操作对象
+ *
+ * conn:
+ * 表示数据库连接对象，用于连接 MySQL / Oracle 等数据库。
+ *
+ * stmt:
+ * 用于执行 SQL 语句。
+ *
+ * 为什么先赋值为 null：
+ * 方便后续在 try-catch-finally 中统一管理和释放资源，
+ * 避免变量作用域问题。
+ *
+ * 这是传统 JDBC 开发中的经典写法。
+ */
+
+
+/*
+ * 使用 StringBuilder 高效拼接字符串
+ *
+ * 适用场景：
+ * 1. 动态构建 SQL、JSON 等复杂字符串
+ * 2. 在循环中大量拼接字符串
+ *
+ * 为什么使用 StringBuilder：
+ * 普通的 String 是不可变的，频繁拼接会导致创建大量临时对象，消耗内存和GC资源。
+ * StringBuilder 是可变的，始终在同一个对象内部修改，极大减少了内存开销。
+ *
+ * 使用示例：
+ * // 1. 创建 StringBuilder 容器
+ * StringBuilder sqlBuilder = new StringBuilder();
+ *
+ * // 2. 向容器中追加 SQL 语句的各个部分
+ * sqlBuilder.append("SELECT * FROM users WHERE id = 1");
+ *
+ * // 3. 最终将容器里的内容转换成普通的 String 字符串拿去执行
+ * String finalSql = sqlBuilder.toString();
+ */

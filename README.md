@@ -54,49 +54,65 @@ fundFlow-manager/
 ├── config/                      # 配置文件
 │   └── db.properties           # 数据库配置（需要修改密码）
 │
+├── docs/                        # 📚 项目文档
+│   ├── LEARNING_GUIDE.md       # 学习指南（Step 1-4 详解）
+│   ├── JDBC_CHEATSHEET.md      # JDBC 常用方法速查表
+│   ├── TRANSACTION_GUIDE.md    # 数据库事务详解
+│   ├── IDEA_SETUP.md           # IntelliJ IDEA 配置指南
+│   ├── PROJECT_OVERVIEW.md     # 项目总览和统计
+│   └── README_UPDATE_NOTES.md  # README 更新说明
+│
 ├── sql/                         # SQL 脚本
 │   └── init.sql                # 数据库初始化脚本
 │
 ├── src/
 │   └── moneyTransfer/
-│       ├── Step1_DatabaseSetup.java      # Step 1: 数据库搭建
-│       ├── Step2_EntityTest.java         # Step 2: 实体类测试（待完成）
-│       ├── Step3_UserDaoTest.java        # Step 3: 用户管理（待完成）
-│       ├── Step4_AccountDaoTest.java     # Step 4: 账户管理（待完成）
-│       ├── Step5_PaymentTest.java        # Step 5: 发钱功能（待完成）
-│       ├── Step6_StatisticsTest.java     # Step 6: 统计功能（待完成）
-│       ├── Main.java                     # 完整系统（待完成）
+│       ├── Step1_DatabaseSetup.java      # Step 1: 数据库搭建 ✅
+│       ├── Step2_EntityTest.java         # Step 2: 实体类测试 ✅
+│       ├── Step3_UserDaoTest.java        # Step 3: 用户管理测试 ✅
+│       ├── Step4_AccountDaoTest.java     # Step 4: 账户管理测试 ✅
+│       ├── Step5_PaymentTest.java        # Step 5: 发钱功能测试 ⏳
+│       ├── Step6_StatisticsTest.java     # Step 6: 统计功能测试 ⏳
+│       ├── Main.java                     # 完整系统 ⏳
 │       │
 │       ├── entity/              # 实体类（对应数据库表）
-│       │   ├── User.java       # 用户实体（待完成）
-│       │   ├── Account.java    # 账户实体（待完成）
-│       │   ├── PaymentRecord.java  # 发钱记录实体（待完成）
-│       │   └── RechargeRecord.java # 充值记录实体（待完成）
+│       │   ├── User.java       # 用户实体 ✅
+│       │   ├── Account.java    # 账户实体 ✅
+│       │   ├── PaymentRecord.java  # 发钱记录实体 ✅
+│       │   └── RechargeRecord.java # 充值记录实体 ✅
 │       │
 │       ├── dao/                 # 数据访问层
-│       │   ├── UserDao.java    # 用户DAO（待完成）
-│       │   ├── AccountDao.java # 账户DAO（待完成）
-│       │   └── PaymentRecordDao.java  # 发钱记录DAO（待完成）
+│       │   ├── UserDao.java    # 用户DAO ✅
+│       │   ├── AccountDao.java # 账户DAO ✅
+│       │   └── PaymentRecordDao.java  # 发钱记录DAO ⏳
 │       │
 │       ├── service/             # 业务逻辑层
-│       │   ├── UserService.java       # 用户服务（待完成）
-│       │   ├── AccountService.java    # 账户服务（待完成）
-│       │   ├── PaymentService.java    # 发钱服务（待完成）
-│       │   └── StatisticsService.java # 统计服务（待完成）
+│       │   ├── UserService.java       # 用户服务 ⏳
+│       │   ├── AccountService.java    # 账户服务 ⏳
+│       │   ├── PaymentService.java    # 发钱服务 ⏳
+│       │   └── StatisticsService.java # 统计服务 ⏳
 │       │
 │       ├── util/                # 工具类
 │       │   ├── DBUtil.java     # 数据库连接工具 ✅
 │       │   └── PrintUtil.java  # 打印工具 ✅
 │       │
-│       └── exception/           # 自定义异常（待完成）
-│           ├── InsufficientBalanceException.java  # 余额不足异常
-│           ├── AccountFrozenException.java        # 账户冻结异常
-│           └── BusinessException.java             # 通用业务异常
+│       └── exception/           # 自定义异常
+│           ├── InsufficientBalanceException.java  # 余额不足异常 ⏳
+│           ├── AccountFrozenException.java        # 账户冻结异常 ⏳
+│           └── BusinessException.java             # 通用业务异常 ⏳
 │
 ├── run.sh                       # 快速运行脚本 ✅
-├── LEARNING_GUIDE.md           # 学习指南 ✅
-└── README.md                    # 本文件
+├── install.sh                   # 依赖安装脚本 ✅
+├── check_db.sh                  # 数据库检查脚本 ✅
+├── mysql-connector-java-8.0.33.jar  # MySQL JDBC 驱动 ✅
+├── .gitignore                   # Git 忽略文件配置 ✅
+└── README.md                    # 项目总览（本文件）
 ```
+
+**图例：**
+- ✅ 已完成
+- ⏳ 待完成
+- 📚 文档目录
 
 ---
 
@@ -506,7 +522,7 @@ javac -encoding UTF-8 ...
 
 **解决方法：**
 
-查看 `IDEA_SETUP.md` 文件，按照步骤配置：
+查看 `docs/IDEA_SETUP.md` 文件，按照步骤配置：
 1. 标记 `src` 为 Sources Root
 2. 添加 MySQL 驱动到 Libraries
 
@@ -528,10 +544,11 @@ rm -rf moneyTransfer/
 ### 项目文档
 
 - **README.md**（本文件）：项目总览和快速开始
-- **LEARNING_GUIDE.md**：详细学习指南（Step 1 详解）
-- **JDBC_CHEATSHEET.md**：JDBC 常用方法速查表
-- **TRANSACTION_GUIDE.md**：数据库事务详解（ACID、commit/rollback）
-- **IDEA_SETUP.md**：IntelliJ IDEA 配置指南
+- **docs/LEARNING_GUIDE.md**：详细学习指南（Step 1-4 详解）
+- **docs/JDBC_CHEATSHEET.md**：JDBC 常用方法速查表
+- **docs/TRANSACTION_GUIDE.md**：数据库事务详解（ACID、commit/rollback）
+- **docs/IDEA_SETUP.md**：IntelliJ IDEA 配置指南
+- **docs/PROJECT_OVERVIEW.md**：项目总览和统计信息
 
 ### SQL 脚本
 
@@ -570,4 +587,4 @@ rm -rf moneyTransfer/
 
 ---
 
-**开始学习吧！打开 `LEARNING_GUIDE.md` 查看详细指导。**
+**开始学习吧！打开 `docs/LEARNING_GUIDE.md` 查看详细指导。**

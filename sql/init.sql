@@ -4,6 +4,8 @@
 
 -- 1. 创建数据库
 DROP DATABASE IF EXISTS money_transfer_db;
+-- CHARACTER SET utf8mb4（指定字符集）utf8 其实是个“阉割版”所以无法保存像 😀 这样的 Emoji 表情或某些生僻汉字,而 utf8mb4 才是真正完整的
+-- COLLATE utf8mb4_unicode_ci（指定排序规则）ci 代表“不区分大小写”
 CREATE DATABASE money_transfer_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE money_transfer_db;
 
@@ -20,6 +22,15 @@ CREATE TABLE users (
     INDEX idx_name (name),
     INDEX idx_phone (phone)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+
+
+/*
+ * DEFAULT CURRENT_TIMESTAMP与ON UPDATE CURRENT_TIMESTAMP数据库会自动帮你维护时间
+ * INDEX idx_name (name),INDEX idx_phone (phone) 是创建复合索引，提高查询效率
+ * 如果没有索引，当你要查一个名字叫"张三"的用户时，数据库只能从第一行开始，一行一行地往下翻（这叫全表扫描），数据量大了会非常慢。索引就像是字典前面的"拼音目录"。
+ * ENGINE=InnoDB：指定这张表的存储引擎为 InnoDB。它支持事务（保证转账等资金操作要么全部成功，要么全部失败回滚）和行级锁（多人同时操作不同数据互不干扰）。
+ * CHECK (balance >= 0) 约束：确保账户余额不会为负。
+ */
 
 -- 3. 创建账户表
 CREATE TABLE accounts (
@@ -63,6 +74,19 @@ CREATE TABLE recharge_records (
     FOREIGN KEY (account_id) REFERENCES accounts(id),
     CHECK (amount > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='充值记录表';
+
+/*
+ * 外键约束：保证数据的完整性和一致性,避免孤儿数据
+ * FOREIGN KEY (account_id)：指定当前这张表（子表/参照表）中的 account_id 字段作为外键。
+ * REFERENCES accounts(id)：指明这个外键必须去引用（关联）父表（被参照表）accounts 的主键 id。
+ * 插入数据时（INSERT），必须先在 accounts 表插入数据，再在 recharge_records 表插入数据，否则会报错。
+ * 删除数据时（DELETE），必须先在 recharge_records 表删除数据，再在 accounts 表删除数据，否则会报错。
+ * 延伸知识：更智能的级联操作
+ * 外键其实还可以玩得更高级。比如在定义外键时加上 ON DELETE CASCADE（级联删除）。
+ * 意思是，如果 accounts 表中的某条记录被删除了，那么 recharge_records 表中所有对应的外键记录都会自动删除。
+ * 这意味着，一旦你删除了 accounts 表里的某个账户，数据库会自动帮你把 recharge_records 表里所有属于这个账户的充值记录也一并全部删掉，彻底防止产生垃圾数据。。
+ */
+
 
 -- 6. 插入测试数据
 -- 插入测试用户

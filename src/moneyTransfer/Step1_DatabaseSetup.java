@@ -85,8 +85,11 @@ public class Step1_DatabaseSetup {
             PrintUtil.subtitle("连接数据库");
             
             // 注意：这里需要先连接到 MySQL 服务器（不指定数据库）
-            String url = "jdbc:mysql://localhost:3306/?useSSL=false&serverTimezone=UTC";
-            conn = java.sql.DriverManager.getConnection(url, "root", "your_password");
+            // 从 db.properties 读取用户名和密码，避免硬编码
+            String username = DBUtil.getUsername();
+            String password = DBUtil.getPassword();
+            String url = "jdbc:mysql://localhost:3306/?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+            conn = java.sql.DriverManager.getConnection(url, username, password);
             
             PrintUtil.success("连接成功");
             

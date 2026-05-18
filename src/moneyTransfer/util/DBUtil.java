@@ -65,10 +65,14 @@ public class DBUtil {
      * @throws SQLException 连接失败时抛出异常
      */
     public static Connection getConnection() throws SQLException {
-        // 建立数据库连接
-        // DriverManager.getConnection() 会根据 url 连接到指定的数据库
         return DriverManager.getConnection(url, username, password);
     }
+    
+    /** 获取数据库用户名（供 Step1 直连 MySQL 服务器时使用） */
+    public static String getUsername() { return username; }
+    
+    /** 获取数据库密码（供 Step1 直连 MySQL 服务器时使用） */
+    public static String getPassword() { return password; }
     
     /**
      * 关闭数据库连接

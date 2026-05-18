@@ -32,11 +32,12 @@ if [ $# -eq 0 ]; then
     echo "  5) Step4: 账户管理测试"
     echo "  6) Step5: 发钱功能测试"
     echo "  7) Step6: 统计功能测试"
-    echo "  8) Main: 完整系统"
-    echo "  9) 编译所有文件"
+    echo "  8) Step7: 完整系统集成测试"
+    echo "  9) Main: 交互式完整系统"
+    echo "  c) 编译所有文件"
     echo "  0) 清理编译文件"
     echo ""
-    read -p "请输入选项 (0-9): " choice
+    read -p "请输入选项: " choice
     
     case $choice in
         1) CLASS="moneyTransfer.util.DBUtil" ;;
@@ -46,8 +47,9 @@ if [ $# -eq 0 ]; then
         5) CLASS="moneyTransfer.Step4_AccountDaoTest" ;;
         6) CLASS="moneyTransfer.Step5_PaymentServiceTest" ;;
         7) CLASS="moneyTransfer.Step6_StatisticsTest" ;;
-        8) CLASS="moneyTransfer.Main" ;;
-        9)
+        8) CLASS="moneyTransfer.Step7_SystemTest" ;;
+        9) CLASS="moneyTransfer.Main" ;;
+        c)
             echo -e "${YELLOW}正在编译所有文件...${NC}"
             javac -cp "$MYSQL_JAR" -d . -encoding UTF-8 src/moneyTransfer/**/*.java src/moneyTransfer/*.java 2>&1
             if [ $? -eq 0 ]; then

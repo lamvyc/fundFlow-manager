@@ -7,11 +7,11 @@
 - ✅ Step 2: 实体类创建完成
 - ✅ Step 3: 用户管理（CRUD）完成
 - ✅ Step 4: 账户管理（事务处理）完成
-- 🔄 **你现在在这里 → Step 5: 发钱功能（复杂事务）**
-- ⏳ Step 6: 统计功能
-- ⏳ Step 7: 完整系统
+- ✅ Step 5: 发钱功能（复杂事务）完成
+- ✅ Step 6: 统计功能完成
+- ✅ Step 7: 完整系统完成
 
-**当前完成度：66% ✅**
+**当前完成度：100% ✅ 项目已全部完成！**
 
 ---
 
@@ -114,23 +114,92 @@ try {
 
 ---
 
-## 🔄 当前学习：Step 5 - 发钱功能（复杂事务）
+### ✅ Step 5: 发钱功能（复杂事务）⭐⭐
+**学到了什么：**
+- 复杂事务处理（多表操作的原子性）
+- 业务逻辑层（Service 层）设计
+- 自定义异常（InsufficientBalanceException 等）
+- FOR UPDATE 悲观锁防止并发问题
+- 异常分层处理（业务异常 vs 系统异常）
 
-### 即将学习的内容
+**关键文件：**
+- `src/moneyTransfer/dao/PaymentRecordDao.java`
+- `src/moneyTransfer/service/PaymentService.java`
+- `src/moneyTransfer/exception/InsufficientBalanceException.java`
+- `src/moneyTransfer/exception/AccountFrozenException.java`
+- `src/moneyTransfer/exception/InvalidAmountException.java`
+- `src/moneyTransfer/Step5_PaymentServiceTest.java`
 
-1. **PaymentRecordDao** - 发钱记录管理
-2. **PaymentService** - 业务逻辑层
-3. **复杂事务处理** - 多表操作的原子性
-4. **业务逻辑验证** - 余额检查、状态检查
-5. **自定义异常** - InsufficientBalanceException 等
+**核心知识点：**
+```java
+// 发钱 = 扣款 + 创建记录，两步必须在同一事务内
+conn.setAutoCommit(false);
+try {
+    // 1. 查询并锁定账户（FOR UPDATE）
+    // 2. 检查余额/状态（业务逻辑验证）
+    // 3. 扣减余额
+    // 4. 创建发钱记录
+    conn.commit();
+} catch (InsufficientBalanceException e) {
+    conn.rollback();
+    throw e;  // 重新抛出业务异常
+}
+```
 
-### 核心挑战
+---
 
-发钱操作涉及两张表：
-- `accounts` 表：扣减余额
-- `payment_records` 表：创建发钱记录
+### ✅ Step 6: 统计功能（JOIN + 聚合）⭐⭐
+**学到了什么：**
+- INNER JOIN / LEFT JOIN 多表关联
+- 聚合函数：SUM、COUNT、AVG、MAX、MIN
+- GROUP BY 分组统计
+- HAVING 过滤分组结果（与 WHERE 的区别）
+- ORDER BY + LIMIT 实现 TOP N 查询
+- 子查询（SELECT 嵌套 SELECT）
+- COALESCE 处理 NULL 值
 
-**必须保证原子性**：两步要么都成功，要么都失败！
+**关键文件：**
+- `src/moneyTransfer/dao/StatisticsDao.java`
+- `src/moneyTransfer/service/StatisticsService.java`
+- `src/moneyTransfer/Step6_StatisticsTest.java`
+
+**核心知识点：**
+```sql
+-- LEFT JOIN + GROUP BY + 聚合函数
+SELECT a.name, COUNT(p.id) AS payment_count, SUM(p.amount) AS total_paid
+FROM accounts a
+LEFT JOIN payment_records p ON a.id = p.account_id AND p.status = 'COMPLETED'
+GROUP BY a.id, a.name
+HAVING payment_count >= 1      -- HAVING 过滤聚合结果
+ORDER BY total_paid DESC
+LIMIT 3;                        -- TOP 3
+```
+
+---
+
+### ✅ Step 7: 完整系统整合⭐⭐⭐
+**学到了什么：**
+- 完整的三层架构：界面层 → Service 层 → DAO 层
+- 交互式命令行菜单系统
+- 各模块协同工作（用户/账户/发钱/统计）
+- 系统级别的异常处理
+- 端到端集成测试
+
+**关键文件：**
+- `src/moneyTransfer/Main.java` - 交互式命令行完整系统
+- `src/moneyTransfer/Step7_SystemTest.java` - 集成测试
+
+**核心知识点：**
+```
+系统架构
+  Main.java（界面层：菜单交互）
+      ↓ 调用
+  Service 层（业务逻辑：PaymentService, StatisticsService）
+      ↓ 调用
+  DAO 层（数据访问：UserDao, AccountDao, PaymentRecordDao, StatisticsDao）
+      ↓ 操作
+  MySQL（money_transfer_db）
+```
 
 ---
 
@@ -153,65 +222,23 @@ try {
 
 ---
 
-## 🎯 Step 1-4 回顾指南
-### 如何复习已完成的内容？
+## 🎯 回顾所有 Step
 
 ```bash
-# 运行快速测试脚本
+# 运行任意一个 Step 的测试
 ./run.sh
 
-# 选择对应的测试：
+# 选项说明：
+# 1) 测试数据库连接
+# 2) Step1: 数据库搭建
 # 3) Step2: 实体类测试
 # 4) Step3: 用户管理测试
 # 5) Step4: 账户管理测试
+# 6) Step5: 发钱功能测试
+# 7) Step6: 统计功能测试
+# 8) Step7: 完整系统集成测试
+# 9) Main: 交互式完整系统
 ```
-
----
-
-## 📝 Step 1: 数据库搭建（已完成）
-
-### 需要做什么？
-
-1. **修改数据库配置文件**
-   - 打开 `config/db.properties`
-   - 把 `db.password=your_password` 改成你的 MySQL 密码
-
-2. **执行数据库初始化脚本**
-   
-   **方式1：命令行执行（推荐）**
-   ```bash
-   # 打开终端，执行：
-   mysql -u root -p
-   # 输入密码后，执行：
-   source /Users/unravel/fundFlow-manager/sql/init.sql
-   
-   # 验证是否成功：
-   SHOW TABLES;
-   # 应该看到 4 张表：users, accounts, payment_records, recharge_records
-   
-   # 查看测试数据：
-   SELECT * FROM users;
-   SELECT * FROM accounts;
-   ```
-
-   **方式2：使用 Java 程序（可选）**
-   ```bash
-   cd /Users/unravel/fundFlow-manager
-   
-   # 编译
-   javac -d . -encoding UTF-8 src/moneyTransfer/Step1_DatabaseSetup.java src/moneyTransfer/util/*.java
-   
-   # 运行
-   java moneyTransfer.Step1_DatabaseSetup
-   ```
-
-3. **测试数据库连接**
-   ```bash
-   javac -d . -encoding UTF-8 src/moneyTransfer/util/DBUtil.java src/moneyTransfer/util/PrintUtil.java
-   java moneyTransfer.util.DBUtil
-   
-   # 如果看到 "✓ 数据库连接成功！" 就说明配置正确
-   ```
 
 ---
 
@@ -229,11 +256,6 @@ create_time 创建时间
 update_time 更新时间
 ```
 
-**测试数据：**
-- 张三：13800138000，工商银行
-- 李四：13900139000，建设银行
-- 王五：13700137000，农业银行
-
 ### 2. accounts（账户表）- 存储发钱账户信息
 ```
 id          账户ID
@@ -243,10 +265,6 @@ status      状态（ACTIVE=正常, FROZEN=冻结）
 create_time 创建时间
 update_time 更新时间
 ```
-
-**测试数据：**
-- 公司发薪账户：余额 100,000 元
-- 奖金发放账户：余额 50,000 元
 
 ### 3. payment_records（发钱记录表）
 ```
@@ -295,36 +313,6 @@ create_time    充值时间
 
 ---
 
-## 📝 完成 Step 1 后的检查清单
-
-执行以下 SQL 验证是否成功：
-
-```sql
--- 1. 切换到数据库
-USE money_transfer_db;
-
--- 2. 查看所有表（应该有 4 张表）
-SHOW TABLES;
-
--- 3. 查看用户表数据（应该有 3 个用户）
-SELECT * FROM users;
-
--- 4. 查看账户表数据（应该有 2 个账户）
-SELECT * FROM accounts;
-
--- 5. 查看发钱记录表（应该是空的）
-SELECT * FROM payment_records;
-
--- 6. 查看充值记录表（应该是空的）
-SELECT * FROM recharge_records;
-
--- 7. 查看表结构
-DESC users;
-DESC accounts;
-```
-
----
-
 ## ❓ 常见问题
 
 ### Q1: 执行 init.sql 时报错 "Access denied"
@@ -335,29 +323,17 @@ DESC accounts;
 
 ### Q3: Java 程序连接失败
 **A:** 检查以下几点：
-1. MySQL 服务是否启动（`sudo systemctl status mysql` 或打开系统偏好设置查看）
+1. MySQL 服务是否启动
 2. 数据库名称是否正确（money_transfer_db）
 3. 用户名密码是否正确
 4. 端口号是否正确（默认 3306）
+5. 连接 URL 中是否加了 `allowPublicKeyRetrieval=true`
 
 ### Q4: 找不到 MySQL 驱动
 **A:** 需要下载 MySQL JDBC 驱动（mysql-connector-java.jar）
 - 下载地址: https://dev.mysql.com/downloads/connector/j/
 - 解压后将 jar 文件放到项目根目录
 - 编译时加上 `-cp mysql-connector-java.jar`
-
----
-
-## 🎉 完成后做什么？
-
-当你看到数据库中有 4 张表，并且有测试数据时，说明 Step 1 完成！
-
-**下一步：Step 2 - 创建实体类**
-- 学习如何用 Java 类表示数据库表
-- 理解 getter/setter 方法
-- 掌握对象封装
-
-**如果遇到问题，随时告诉我！我会帮你解决。**
 
 ---
 
@@ -368,4 +344,4 @@ DESC accounts;
 3. **循序渐进**：每个 Step 都测试通过后再进行下一步
 4. **勤于提问**：遇到不懂的概念立即问我
 
-加油！💪
+项目已全部完成，继续加油！💪

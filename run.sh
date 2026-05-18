@@ -44,7 +44,7 @@ if [ $# -eq 0 ]; then
         3) CLASS="moneyTransfer.Step2_EntityTest" ;;
         4) CLASS="moneyTransfer.Step3_UserDaoTest" ;;
         5) CLASS="moneyTransfer.Step4_AccountDaoTest" ;;
-        6) CLASS="moneyTransfer.Step5_PaymentTest" ;;
+        6) CLASS="moneyTransfer.Step5_PaymentServiceTest" ;;
         7) CLASS="moneyTransfer.Step6_StatisticsTest" ;;
         8) CLASS="moneyTransfer.Main" ;;
         9)

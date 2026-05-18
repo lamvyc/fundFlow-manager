@@ -80,4 +80,30 @@ public class PrintUtil {
         }
         System.out.println();
     }
+    
+    /**
+     * 打印头部标题（用于测试程序开始）
+     */
+    public static void printHeader(String text) {
+        System.out.println("\n" + BLUE + "╔════════════════════════════════════════╗");
+        System.out.println("║  " + text);
+        System.out.println("╚════════════════════════════════════════╝" + RESET + "\n");
+    }
+    
+    /**
+     * 打印章节标题
+     */
+    public static void printSection(String text) {
+        System.out.println("\n" + CYAN + "▶ " + text + RESET);
+        System.out.println(CYAN + "─────────────────────────────────────────" + RESET);
+    }
+    
+    /**
+     * 打印底部标题（用于测试程序结束）
+     */
+    public static void printFooter(String text) {
+        System.out.println("\n" + BLUE + "════════════════════════════════════════");
+        System.out.println("  " + text);
+        System.out.println("════════════════════════════════════════" + RESET + "\n");
+    }
 }
